@@ -28,8 +28,11 @@ $( document ).ready(function() {
 
 //keyup function
 $(document).keyup(function( event ) {
-	var index = doGetCaretPosition(document.getElementsByClassName("input")[1]);
+	  var index = doGetCaretPosition(document.getElementsByClassName("input")[1]);
   	var guncelString = document.getElementsByClassName("input")[1].innerText;
+    var emoji_string = guncelString.substring(0, index - 1);
+    var emoji_start_pos = emoji_string.lastIndexOf(":");
+    var emoji_filter = guncelString.substring(emoji_start_pos,index);
 	if(event.key == ':')
 	{
 		//filter (index,document.getElementsByClassName("input")[1].innerText.indexOf(':') );
@@ -39,8 +42,10 @@ $(document).keyup(function( event ) {
       filter_emojis(':');
     }
 	}
-  if(guncelString.indexOf(':') > -1)
-    filter_emojis(guncelString.substr(guncelString.lastIndexOf(':'),index));
+
+  if(guncelString.indexOf(':') > -1){
+    filter_emojis(emoji_filter);
+  }
 
 });
 
