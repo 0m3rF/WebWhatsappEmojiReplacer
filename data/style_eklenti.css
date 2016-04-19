@@ -1,0 +1,6 @@
+div .autocomplete_main{
+overflow: hidden;
+position: fixed;
+bottom: 7%;
+z-index: 1000000;
+}
