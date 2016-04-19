@@ -8,11 +8,28 @@ $( document ).ready(function() {
    {
     "emoji": ":deneme:",
     "icon": "👅"
-   }
+  },
+  {
+   "emoji": ":ebeme:",
+   "icon": "👅"
+ },
+ {
+  "emoji": ":febeme:",
+  "icon": "👅"
+},
+{
+ "emoji": ":gebere:",
+ "icon": "👅"
+},
+{
+ "emoji": ":gebere1:",
+ "icon": "👅"
+}
   ]};
 
   var items = json.items;
-  var autocomplete_open = false;
+  var autocomplete_init = false;
+  var emojiIndex = 0;
   //var guncelString = document.getElementsByClassName("input")[1].innerText;
 //get cursor position
   function doGetCaretPosition (element1)
@@ -38,21 +55,25 @@ $(document).keyup(function( event ) {
 		//filter (index,document.getElementsByClassName("input")[1].innerText.indexOf(':') );
 		//window.alert(": basıldı" + index + $('div.input').text());
 		//create_autocomplete();
-    if(index - guncelString.indexOf(':') == 2 ){
-      filter_emojis(':');
+    if((index - guncelString.indexOf(':') == 2) ){
+    //  event.preventDefault();
+      filter_emojis(':',event);
     }
 	}
 
-  if(guncelString.indexOf(':') > -1){
-    filter_emojis(emoji_filter);
+  if((guncelString.indexOf(':') > -1) ){
+    //event.preventDefault();
+    filter_emojis(emoji_filter,event);
   }
+
+
 
 });
 
 //creating autocomplete div
 function create_autocomplete()
 {
- if(!autocomplete_open){
+ if(!autocomplete_init){
 	var parent_div = document.getElementsByClassName("pane-chat-tile-container")[0];
 	var autocomplete_div = document.createElement("div");
 
@@ -67,13 +88,16 @@ function create_autocomplete()
   autocomplete_div.style.margin = '30px';
   autocomplete_div.style.left = doGetCaretPosition(document.getElementsByClassName("input")[1]) * 10 + 'px';
   //filter_emojis();
-  //autocomplete_open = true;
-  autocomplete_open = true;
+  //autocomplete_init = true;
+  autocomplete_init = true;
+
+
+
   }
 }
 
 //filtering emojis
-function filter_emojis(filtered_string)
+function filter_emojis(filtered_string, event)
 {
   create_autocomplete();
   var emojis = document.getElementsByClassName("autocomplete_main")[0];
@@ -81,27 +105,58 @@ function filter_emojis(filtered_string)
   for(var i = 0; i < items.length; i++)
   {
     if(items[i].emoji.indexOf(filtered_string) > -1){
+      var div = document.createElement("div");
+      div.classList.add("emoji-shortcut");
       var h5 = document.createElement("h5");
+      //h5.classList.add("emoji-shortcut");
       h5.innerHTML = items[i].emoji;
-      emojis.appendChild(h5);
+      div.appendChild(h5);
       var p = document.createElement("p");
+      //p.classList.add("emoji-shortcut");
       p.innerHTML = items[i].icon;
-      emojis.appendChild(p);
+      div.appendChild(p);
+      emojis.appendChild(div);
+  }
+  if(document.getElementsByClassName("emoji-shortcut")[0]!= undefined ){
+    document.getElementsByClassName("emoji-shortcut")[0].style.backgroundColor = '#ccc';
   }
 }
+
+//if(event.keyCode ==  39 && document.getElementsByClassName("autocomplete_main")[0].innerText != ''){
+  //event.preventDefault();
+
+
+
+//}
 }
 
 
+  function nextItem(activeIndex){
+    var activeShortucts =  document.getElementsByClassName("emoji-shortcut");
+    var activeCount = activeShortucts.length;
+    if(activeIndex + 1 > activeCount)
+      higlightItem(0);
+    else {
+      higlightItem(activeIndex + 1);
+    }
+  }
 
-function filter(cursorIndex, controllerIndex)
-{
-	var guncelString = document.getElementsByClassName("input")[1].innerText;
+  function previousItem(activeIndex){
+    var activeShortucts =  document.getElementsByClassName("emoji-shortcut");
+    var activeCount = activeShortucts.length;
+    if(activeIndex - 1 < 0)
+      higlightItem(activeCount - 1);
+    else {
+      higlightItem(activeIndex - 1);
+    }
+  }
 
-	var replacement = guncelString.substr(controllerIndex,cursorIndex);
-  create_autocomplete();
-  filter_emojis(replacement);
-	//window.alert(deneme);
-
-}
+  function highlightItem(emoIndex){
+    var itemtobeHighlighted = document.getElementsByClassName("emoji-shortcut")[emoIndex];
+    for(var i = 0; i < itemtobeHighlighted.length; i++){
+      document.getElementsByClassName("emoji-shortcut")[i].style.backgroundColor = 'transparent';
+    }
+    itemtobeHighlighted.style.backgroundColor = '#ccc';
+  }
 
 });
