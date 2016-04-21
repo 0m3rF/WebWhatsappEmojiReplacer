@@ -11,18 +11,29 @@ $( document ).ready(function() {
   },
   {
    "emoji": ":ebeme:",
-   "icon": "👅"
+   "icon": "😀"
  },
  {
   "emoji": ":febeme:",
-  "icon": "👅"
+  "icon": "☺️"
 },
 {
+ "emoji": ":gegfe:",
+ "icon": "😱"
+},{
  "emoji": ":gebere:",
- "icon": "👅"
-},
-{
- "emoji": ":gebere1:",
+ "icon": "😸"
+},{
+ "emoji": ":hesdebere:",
+ "icon": "🙌"
+},{
+ "emoji": ":jjfbere:",
+ "icon": "🙁"
+},{
+ "emoji": ":kebere:",
+ "icon": "😣"
+},{
+ "emoji": ":lebere:",
  "icon": "👅"
 }
   ]};
@@ -30,8 +41,7 @@ $( document ).ready(function() {
   var items = json.items;
   var autocomplete_init = false;
   var emojiIndex = 0;
-  //var guncelString = document.getElementsByClassName("input")[1].innerText;
-//get cursor position
+
   function doGetCaretPosition (element1)
 {
         var caretOffset = 0;
@@ -52,21 +62,51 @@ $(document).keyup(function( event ) {
     var emoji_filter = guncelString.substring(emoji_start_pos,index);
 	if(event.key == ':')
 	{
-		//filter (index,document.getElementsByClassName("input")[1].innerText.indexOf(':') );
-		//window.alert(": basıldı" + index + $('div.input').text());
-		//create_autocomplete();
-    if((index - guncelString.indexOf(':') == 2) ){
-    //  event.preventDefault();
+  /*  if((index - guncelString.indexOf(':') == 2) ){
       filter_emojis(':',event);
-    }
+    }*/
 	}
 
-  if((guncelString.indexOf(':') > -1) ){
-    //event.preventDefault();
+  if(guncelString.indexOf(':') > -1 ){
     filter_emojis(emoji_filter,event);
   }
+      if(document.getElementsByClassName("emoji-shortcut")[0] != undefined ){
+    document.getElementsByClassName("input")[1].addEventListener("keydown", function(e) {
+    if([37, 38, 39, 40, 13].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+        if(e.keyCode == 13 && !counter){
+            var emojiUTF = document.getElementsByClassName("autocomplete_main")[0].getElementsByClassName("emoji")[emojiIndex].innerHTML;
+            guncelString = guncelString.replace(emoji_filter, emojiUTF);
+            document.getElementsByClassName("input")[1].innerText = guncelString;
+            window.alert("önce" + emojiIndex);
+            emojiIndex = 0;
+            document.getElementsByClassName("autocomplete_main")[0].innerHTML = "";
+            document.execCommand('insertHtml', null, "&nbsp;");
+            e.keyCode = 0;
+        }
+    }
+}, false);
+    switch(event.keyCode){
+      case 38:
+        event.preventDefault();
+        nextItem(emojiIndex);
+        break;
+      case 39:
+        event.preventDefault();
+        nextItem(emojiIndex);
+        break;
+      case 40:
+        event.preventDefault();
+        previousItem(emojiIndex);
+        break;
+      case 37:
+        event.preventDefault();
+        previousItem(emojiIndex);
+        break;
 
+    }
 
+  }
 
 });
 
@@ -77,18 +117,14 @@ function create_autocomplete()
 	var parent_div = document.getElementsByClassName("pane-chat-tile-container")[0];
 	var autocomplete_div = document.createElement("div");
 
-//	autocomplete_div.innerHTML = "<h1>DENEME!</h1>";
 	autocomplete_div.classList.add('autocomplete_main');
 
 	parent_div.parentNode.insertBefore(autocomplete_div, parent_div.nextSibling);
 	autocomplete_div.style.overflow = 'hidden';
 	autocomplete_div.style.color = 'red';
-  autocomplete_div.style.backgroundColor = '#efefef';
+  autocomplete_div.style.backgroundColor = '#f3f0ef';
   autocomplete_div.style.padding = '10px';
-  autocomplete_div.style.margin = '30px';
-  autocomplete_div.style.left = doGetCaretPosition(document.getElementsByClassName("input")[1]) * 10 + 'px';
-  //filter_emojis();
-  //autocomplete_init = true;
+  autocomplete_div.style.width = '100%';
   autocomplete_init = true;
 
 
@@ -108,46 +144,41 @@ function filter_emojis(filtered_string, event)
       var div = document.createElement("div");
       div.classList.add("emoji-shortcut");
       var h5 = document.createElement("h5");
-      //h5.classList.add("emoji-shortcut");
       h5.innerHTML = items[i].emoji;
       div.appendChild(h5);
       var p = document.createElement("p");
-      //p.classList.add("emoji-shortcut");
       p.innerHTML = items[i].icon;
+      p.classList.add("emoji");
       div.appendChild(p);
       emojis.appendChild(div);
-  }
-  if(document.getElementsByClassName("emoji-shortcut")[0]!= undefined ){
-    document.getElementsByClassName("emoji-shortcut")[0].style.backgroundColor = '#ccc';
-  }
+      div.style.float = "left";
+      div.style.padding = "5px";
 }
-
-//if(event.keyCode ==  39 && document.getElementsByClassName("autocomplete_main")[0].innerText != ''){
-  //event.preventDefault();
-
-
-
-//}
+}
 }
 
 
   function nextItem(activeIndex){
     var activeShortucts =  document.getElementsByClassName("emoji-shortcut");
     var activeCount = activeShortucts.length;
-    if(activeIndex + 1 > activeCount)
-      higlightItem(0);
+    if(activeIndex + 1 >= activeCount){
+      highlightItem(0);
+      emojiIndex = 0;}
     else {
-      higlightItem(activeIndex + 1);
+      highlightItem(activeIndex + 1);
+      emojiIndex++;
     }
   }
 
   function previousItem(activeIndex){
     var activeShortucts =  document.getElementsByClassName("emoji-shortcut");
     var activeCount = activeShortucts.length;
-    if(activeIndex - 1 < 0)
-      higlightItem(activeCount - 1);
+    if(activeIndex == 0){
+      highlightItem(activeCount - 1);
+      emojiIndex = activeCount - 1;}
     else {
-      higlightItem(activeIndex - 1);
+      highlightItem(activeIndex - 1);
+      emojiIndex--;
     }
   }
 
