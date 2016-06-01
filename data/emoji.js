@@ -1,4 +1,5 @@
 $( document ).ready(function() {
+	//disabled confirm exit dialog
 	window.onbeforeunload = false;
 	var json = {"items": [
 	{
@@ -54,12 +55,19 @@ $( document ).ready(function() {
 $(document).keyup(function( event ) {
 	var index = doGetCaretPosition(document.getElementsByClassName("input")[1]);
 	var guncelString = document.getElementsByClassName("input")[1].innerText;
-	var emoji_string = guncelString.substring(0, index - 1);
+	var emoji_string = guncelString.substring(0, index);
 	var emoji_start_pos = emoji_string.lastIndexOf(":");
 	var emoji_filter = guncelString.substring(emoji_start_pos,index);
+	var keycode = event.keyCode;
 
 if(guncelString.indexOf(':') > -1 && event.keyCode!=16 && event.keyCode!=38 && event.keyCode!=39 && event.keyCode!=37 && event.keyCode!=40 && event.keyCode != 13){ //except enter keycode
 	filter_emojis(emoji_filter,event);
+}
+if (guncelString.indexOf(':') == -1 ){
+	document.getElementsByClassName("autocomplete_main")[0].innerHTML = "";
+}
+if (keycode == 27){
+	document.getElementsByClassName("autocomplete_main")[0].innerHTML = "";
 }
 if(document.getElementsByClassName("emoji-shortcut")[0] != undefined && document.getElementsByClassName("autocomplete_main")[0].innerText != ""){
 	document.getElementsByClassName("input")[1].addEventListener("keydown", function(e) {
@@ -75,7 +83,7 @@ if(document.getElementsByClassName("emoji-shortcut")[0] != undefined && document
 			if(e.keyCode == 13){
 				index = doGetCaretPosition(document.getElementsByClassName("input")[1]);
 				guncelString = document.getElementsByClassName("input")[1].innerText;
-				emoji_string = guncelString.substring(0, index - 1);
+				emoji_string = guncelString.substring(0, index);
 				emoji_start_pos = emoji_string.lastIndexOf(":");
 				emoji_filter = guncelString.substring(emoji_start_pos,index);
 				var emojiUTF = document.getElementsByClassName("autocomplete_main")[0].getElementsByClassName("emoji")[emojiIndex].innerHTML;
