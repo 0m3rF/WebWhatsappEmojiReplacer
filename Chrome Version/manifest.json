@@ -1,0 +1,23 @@
+﻿{
+  "manifest_version": 2,
+
+  "name": "WebWhatsApp Emoji Replacer",
+  "description": "Emoji shortcuts for Web WhatsApp",
+  "version": "0.1",
+
+  "optional_permissions": ["https://*.istanbul.edu.tr/*"],
+  
+  
+  "permissions": ["tabs","activeTab","background"],
+  "optional_permissions": ["tabs"],
+  "content_scripts": [{
+			"matches": ["https://*.whatsapp.com/"],
+            "js": ["jquery-1.12.3.min.js","jquery-ui.min.js","emoji_chrome.js"],
+			"css": ["emoji.css"]
+    }],
+  "icons": { "16": "icon.png",
+           "48": "icon.png",
+          "128": "icon.png" }
+
+		   
+}
